@@ -2,15 +2,15 @@
 
 const nextConfig = {
   env: {
-    name: "Annie's Workspaces",
-    description: 'A collection of my personal workspaces.',
+    name: 'Kasm Technologies',
+    description: 'The official store for Kasm supported workspaces.',
     icon: '/img/logo.svg',
-    listUrl: 'https://annie444.github.io/workspaces/',
-    contactUrl: 'https://github.com/annie444/workspaces/issues',
+    listUrl: 'https://registry.kasmweb.com/',
+    contactUrl: 'https://kasmweb.com/support',
   },
   reactStrictMode: true,
   swcMinify: true,
-  basePath: '/workspaces/1.0',
+  basePath: '/kasm-registry/1.0',
   trailingSlash: true,
   images: {
     unoptimized: true,

@@ -16,16 +16,16 @@ export default function Home({ searchText }) {
       .then((workspaces) => {
         let wsversions = []
         workspaces.workspaces.forEach((workspace) => {
-          if(workspace.compatibility) {
+          if (workspace.compatibility) {
             workspace.compatibility.forEach((v) => {
               const value = parseFloat(v)
-              if(wsversions.indexOf(value) === -1) {
+              if (wsversions.indexOf(value) === -1) {
                 wsversions.push(value)
               }
             })
           }
         })
-        const sorted = wsversions.sort((a,b) => a-b).reverse()
+        const sorted = wsversions.sort((a, b) => a - b).reverse()
 
         setVersions(sorted)
         if (currentVersion === null) {
@@ -69,7 +69,7 @@ export default function Home({ searchText }) {
 
       <main className="p-8 py-10 xl:px-20">
         <h1 className='flex flex-wrap-reverse uppercase tracking-widest justify-center mb-10 gap-5'>
-        <span className='flex items-center text-lg bg-slate-100/90 rounded overflow-hidden shadow'>
+          <span className='flex items-center text-lg bg-slate-100/90 rounded overflow-hidden shadow'>
             <span className='flex px-3 text-xs opacity-100'>Workspaces</span>
             <span className='text-white p-3 py-1 flex bg-[#2980b9]'>{workspaces && workspaces.workspacecount}</span>
           </span>
@@ -81,7 +81,7 @@ export default function Home({ searchText }) {
           </span>
         </h1>
         <div className="flex flex-wrap gap-1 justify-center">
-        {filteredworkspaces && filteredworkspaces.length > 0 && filteredworkspaces.map(function (workspace, i) {
+          {filteredworkspaces && filteredworkspaces.length > 0 && filteredworkspaces.map(function(workspace, i) {
             return <Workspace key={workspace.sha} workspace={workspace} />
           })}
           {filteredworkspaces && filteredworkspaces.length === 0 && (
