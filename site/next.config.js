@@ -2,10 +2,10 @@
 
 const nextConfig = {
   env: {
-    name: "Annie's HomeLab",
-    description: 'My personal repository of Kasm supported workspaces.',
-    icon: 'https://annie444.github.io/workspaces/1.0/image.png',
-    listUrl: 'https://annie444.githib.io/workspaces/',
+    name: "Annie's Workspaces",
+    description: 'A collection of my personal workspaces.',
+    icon: '/img/logo.svg',
+    listUrl: 'https://annie444.github.io/workspaces/',
     contactUrl: 'https://github.com/annie444/workspaces/issues',
   },
   reactStrictMode: true,
