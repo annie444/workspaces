@@ -17,7 +17,7 @@
     "Productivity",
     "Multimedia"
   ],
-  "friendly_name": "Orca Slicer",
+  "friendly_name": "MartianManor OrcaSlicer",
   "architecture": [
     "amd64"
   ],
@@ -32,6 +32,14 @@
     },
     {
       "version": "1.16.x",
+      "image": "annie444/orcaslicer:latest",
+      "uncompressed_size_mb": 4090,
+      "available_tags": [
+        "latest"
+      ]
+    },
+    {
+      "version": "1.15.x",
       "image": "annie444/orcaslicer:latest",
       "uncompressed_size_mb": 4090,
       "available_tags": [
