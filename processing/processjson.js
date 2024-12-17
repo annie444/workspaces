@@ -6,63 +6,86 @@ const nextConfig = require("../site/next.config.js")
 var dir = "./public";
 
 if (!fs.existsSync(dir)) {
-	fs.mkdirSync(dir);
+  fs.mkdirSync(dir);
 }
 if (!fs.existsSync(dir + "/icons")) {
-	fs.mkdirSync(dir + "/icons");
+  fs.mkdirSync(dir + "/icons");
 }
 
-glob("**/workspace.json", async function (err, files) {
-	if (err) {
-		console.log(
-			"cannot read the folder, something goes wrong with glob",
-			err
-		);
-	}
+glob("**/workspace.json", async function(err, files) {
+  if (err) {
+    console.log(
+      "cannot read the folder, something goes wrong with glob",
+      err
+    );
+  }
 
-	let workspacetotal = files.length;
-	let workspaces = [];
-	let promises = [];
+  let workspacetotal = files.length;
+  let workspaces = [];
+  let promises = [];
 
-	const options = {
-		algho: "sha1",
-		encoding: "hex",
-	};
+  const options = {
+    algho: "sha1",
+    encoding: "hex",
+  };
 
-	for (const file of files) {
-		//files.forEach(async function(file) {
+  let channels = new Set()
+  let versions = new Set()
 
-		let folder = file.replace("/workspace.json", "");
+  for (const file of files) {
+    //files.forEach(async function(file) {
 
-		let hash = await hashElement(folder, options);
-		let filedata = fs.readFileSync(file);
+    let folder = file.replace("/workspace.json", "");
 
-		let parsed = JSON.parse(filedata);
-		parsed.sha = hash.hash;
-		console.log(parsed.name + ' added')
-		workspaces.push(parsed);
+    let hash = await hashElement(folder, options);
+    let filedata = fs.readFileSync(file);
 
-		if (fs.existsSync(folder + "/" + parsed.image_src)) {
-			let imagedata = fs.readFileSync(folder + "/" + parsed.image_src);
-			fs.writeFileSync(dir + "/icons/" + parsed.image_src, imagedata);
-		} else {
-			console.error("missing file: ".folder + "/" + parsed.image_src);
-		}
+    let parsed = JSON.parse(filedata);
+    parsed.sha = hash.hash;
+    console.log(parsed.friendly_name + ' added')
+    parsed.compatibility.forEach((element, index) => {
+      if ('available_tags' in element) {
+        element.available_tags.forEach((el) => {
+          channels.add(el)
+        })
+      }
+      if ('version' in element) {
+        versions.add(element.version)
+      }
+    })
+    workspaces.push(parsed);
 
-	}
+    if (fs.existsSync(folder + "/" + parsed.image_src)) {
+      let imagedata = fs.readFileSync(folder + "/" + parsed.image_src);
+      fs.writeFileSync(dir + "/icons/" + parsed.image_src, imagedata);
+    } else {
+      console.error("missing file: ".folder + "/" + parsed.image_src);
+    }
 
-	let json = {
-		name: nextConfig.env.name || 'Unknown store',
-		workspacecount: workspacetotal,
-		icon: nextConfig.env.icon || null,
-		description: nextConfig.env.description || null,
-		list_url: nextConfig.env.listUrl || null,
-		contact_url: nextConfig.env.contactUrl || null,
-		modified: Date.now(),
-		workspaces: workspaces,
-	};
+  }
 
-	let data = JSON.stringify(json);
+  let json = {
+    name: nextConfig.env.name || 'Unknown store',
+    workspacecount: workspacetotal,
+    icon: nextConfig.env.icon || null,
+    description: nextConfig.env.description || null,
+    list_url: nextConfig.env.listUrl || null,
+    contact_url: nextConfig.env.contactUrl || null,
+    modified: Date.now(),
+    workspaces: workspaces,
+    channels: [...channels],
+    default_channel: 'develop'
+  };
 
-	fs.writeFileSync(dir + "/list.json", data);
+  if (channels.size === 0) {
+    json.default_channel = null
+  }
+
+  let data = JSON.stringify(json);
+
+  fs.writeFileSync(dir + "/list.json", data);
+  fs.writeFileSync(dir + "/versions.json", JSON.stringify({
+    versions: [...versions]
+  }));
+
 });
